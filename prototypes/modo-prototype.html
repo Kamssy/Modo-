@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modo — Personal Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   MODO DESIGN SYSTEM
+   ============================================ */
+:root {
+  /* Brand */
+  --primary:        #670626;
+  --primary-deep:   #4a0419;
+  --primary-mid:    #8c0933;
+  --primary-light:  #f9eaee;
+  --secondary:      #BAD797;
+  --secondary-deep: #8fb872;
+  --secondary-light:#edf7e4;
+
+  /* Neutrals */
+  --ink:            #0e0b0c;
+  --ink-80:         #2c2729;
+  --ink-60:         #5a5254;
+  --ink-40:         #8e8688;
+  --ink-20:         #c8c3c4;
+  --ink-10:         #ede9ea;
+  --ink-05:         #f8f5f6;
+  --white:          #ffffff;
+
+  /* Sidebar */
+  --sidebar-bg:     #1a0a0e;
+  --sidebar-hover:  rgba(186,215,151,.08);
+  --sidebar-active: rgba(186,215,151,.14);
+
+  /* Semantic */
+  --income:  #4daf7c;
+  --expense: #e05a6b;
+  --warn:    #f0b429;
+  --info:    #4a90d9;
+
+  /* Shadows */
+  --shadow-sm:  0 2px 8px rgba(103,6,38,.07);
+  --shadow-md:  0 6px 24px rgba(103,6,38,.11);
+  --shadow-lg:  0 16px 48px rgba(103,6,38,.15);
+
+  /* Typography */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-full: 9999px;
+
+  /* Transitions */
+  --ease: cubic-bezier(.4,0,.2,1);
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--ink-05);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 1fr;
+  min-height: 100vh;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.sidebar {
+  background: var(--sidebar-bg);
+  position: fixed;
+  top: 0; left: 0;
+  width: 240px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 24px;
+  z-index: 100;
+  overflow-y: auto;
+  transition: transform .3s var(--ease);
+}
+
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 8px;
+}
+.logo-mark {
+  width: 34px; height: 34px;
+  background: var(--primary);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.logo-mark::after {
+  content: '';
+  position: absolute;
+  top: -6px; right: -6px;
+  width: 16px; height: 16px;
+  background: var(--secondary);
+  border-radius: 50%;
+}
+.logo-mark span {
+  font-family: var(--font-display);
+  color: #fff;
+  font-size: 17px;
+  position: relative; z-index: 1;
+}
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: .01em;
+}
+.logo-tag {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--secondary);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-top: -4px;
+  display: block;
+}
+
+.sidebar-section-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  padding: 16px 24px 6px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 0 12px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  color: rgba(255,255,255,.5);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s var(--ease);
+  margin-bottom: 2px;
+  position: relative;
+}
+.nav-item:hover {
+  background: var(--sidebar-hover);
+  color: rgba(255,255,255,.85);
+}
+.nav-item.active {
+  background: var(--sidebar-active);
+  color: var(--secondary);
+}
+.nav-item.active .nav-icon { color: var(--secondary); }
+.nav-badge {
+  margin-left: auto;
+  background: var(--primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: var(--r-full);
+  min-width: 20px;
+  text-align: center;
+}
+.nav-icon {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  opacity: .7;
+}
+.nav-item.active .nav-icon { opacity: 1; }
+
+.sidebar-bottom {
+  padding: 0 12px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding-top: 16px;
+  margin-top: 8px;
+}
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background .2s;
+}
+.user-card:hover { background: var(--sidebar-hover); }
+.user-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-mid));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--secondary);
+  flex-shrink: 0;
+}
+.user-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.8); }
+.user-plan { font-size: 10.5px; color: var(--secondary); opacity: .8; }
+.user-arrow { margin-left: auto; color: rgba(255,255,255,.3); font-size: 12px; }
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main {
+  margin-left: 240px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  background: rgba(248,245,246,.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--ink-10);
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 50;
+}
+.topbar-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink);
+}
+.topbar-subtitle {
+  font-size: 12.5px;
+  color: var(--ink-40);
+  margin-left: 4px;
+}
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.topbar-btn {
+  width: 38px; height: 38px;
+  border-radius: var(--r-sm);
+  background: var(--white);
+  border: 1px solid var(--ink-10);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-60);
+  transition: all .2s;
+  position: relative;
+}
+.topbar-btn:hover { border-color: var(--primary); color: var(--primary); }
+.notif-dot {
+  position: absolute;
+  top: 7px; right: 7px;
+  width: 7px; height: 7px;
+  background: var(--expense);
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-05);
+}
+.period-select {
+  height: 38px;
+  border: 1px solid var(--ink-10);
+  background: var(--white);
+  border-radius: var(--r-sm);
+  padding: 0 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-60);
+  outline: none;
+  cursor: pointer;
+}
+
+.content {
+  flex: 1;
+  padding: 28px 32px;
+}
+
+/* ============================================
+   GRID SYSTEM
+   ============================================ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.grid-main { display: grid; grid-template-columns: 1fr 360px; gap: 20px; }
+
+/* ============================================
+   CARDS
+   ============================================ */
+.card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  border: 1px solid var(--ink-10);
+  box-shadow: var(--shadow-sm);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-60);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.card-action {
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.card-action:hover { opacity: .7; }
+
+/* ============================================
+   STAT CARDS (4-grid)
+   ============================================ */
+.stat-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+  border: 1px solid var(--ink-10);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.stat-card.income::before  { background: var(--income); }
+.stat-card.expense::before { background: var(--expense); }
+.stat-card.balance::before { background: var(--primary); }
+.stat-card.savings::before { background: var(--secondary-deep); }
+
+.stat-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+.stat-card.income  .stat-icon { background: rgba(77,175,124,.12); }
+.stat-card.expense .stat-icon { background: rgba(224,90,107,.12); }
+.stat-card.balance .stat-icon { background: var(--primary-light); }
+.stat-card.savings .stat-icon { background: var(--secondary-light); }
+
+.stat-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: var(--r-full);
+}
+.stat-change.up   { background: rgba(77,175,124,.12); color: var(--income); }
+.stat-change.down { background: rgba(224,90,107,.12); color: var(--expense); }
+
+/* ============================================
+   WALLET CARD
+   ============================================ */
+.wallet-card {
+  background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 55%, var(--primary-mid) 100%);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wallet-card::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(186,215,151,.08);
+}
+.wallet-card::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 60px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+}
+.wallet-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+.wallet-chip {
+  width: 36px; height: 26px;
+  background: rgba(255,255,255,.18);
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,.25);
+}
+.wallet-network {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  opacity: .9;
+}
+.wallet-balance-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 6px;
+  position: relative; z-index: 1;
+}
+.wallet-balance {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: #fff;
+  line-height: 1;
+  position: relative; z-index: 1;
+}
+.wallet-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: relative; z-index: 1;
+}
+.wallet-number {
+  font-size: 13px;
+  letter-spacing: .2em;
+  color: rgba(255,255,255,.55);
+  font-weight: 400;
+}
+.wallet-in-out {
+  display: flex;
+  gap: 20px;
+}
+.wallet-stat { text-align: right; }
+.wallet-stat-label { font-size: 10px; color: rgba(255,255,255,.45); margin-bottom: 2px; }
+.wallet-stat-value { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9); }
+.wallet-stat-value.in  { color: var(--secondary); }
+.wallet-stat-value.out { color: #ff8fa0; }
+
+/* ============================================
+   CHART AREA (SVG Mock)
+   ============================================ */
+.chart-wrap {
+  position: relative;
+  height: 180px;
+  margin: 0 -4px;
+}
+.chart-svg { width: 100%; height: 100%; }
+
+/* Line chart path */
+.chart-line-path {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart-fill-path {
+  fill: url(#incomeGrad);
+  opacity: .5;
+}
+.chart-line-path2 {
+  fill: none;
+  stroke: var(--secondary-deep);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 5 3;
+}
+.chart-dot {
+  fill: var(--primary);
+  stroke: #fff;
+  stroke-width: 2;
+}
+.chart-dot-active {
+  fill: var(--white);
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 6px rgba(103,6,38,.4));
+}
+.chart-label { font-family: var(--font-body); fill: var(--ink-40); font-size: 11px; }
+
+/* Tooltip */
+.chart-tooltip-group rect { fill: var(--ink); rx: 6; }
+.chart-tooltip-group text { fill: #fff; font-family: var(--font-body); font-size: 11px; }
+
+/* Donut chart */
+.donut-wrap { position: relative; display: inline-block; }
+.donut-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+.donut-center-val { font-family: var(--font-display); font-size: 22px; color: var(--ink); }
+.donut-center-label { font-size: 10px; color: var(--ink-40); margin-top: 2px; }
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-item { margin-bottom: 16px; }
+.progress-item:last-child { margin-bottom: 0; }
+.progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.progress-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.progress-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.progress-pct { font-size: 12px; color: var(--ink-40); font-weight: 500; }
+.progress-bar-bg {
+  height: 6px;
+  background: var(--ink-10);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  transition: width .6s var(--ease);
+}
+.progress-amounts {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.progress-spent { font-size: 11px; color: var(--ink-60); font-weight: 500; }
+.progress-budget { font-size: 11px; color: var(--ink-40); }
+
+/* ============================================
+   TRANSACTION LIST
+   ============================================ */
+.txn-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ink-05);
+  transition: background .15s;
+}
+.txn-item:last-child { border-bottom: none; }
+.txn-icon {
+  width: 42px; height: 42px;
+  border-radius: var(--r-md);
+  background: var(--ink-05);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+.txn-info { flex: 1; min-width: 0; }
+.txn-name { font-size: 13.5px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.txn-date { font-size: 11.5px; color: var(--ink-40); margin-top: 1px; }
+.txn-category {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  background: var(--ink-05);
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+.txn-amount { font-size: 14px; font-weight: 600; white-space: nowrap; }
+.txn-amount.debit  { color: var(--expense); }
+.txn-amount.credit { color: var(--income); }
+
+/* ============================================
+   GOAL CARDS
+   ============================================ */
+.goal-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  border: 1px solid var(--ink-10);
+  position: relative;
+  overflow: hidden;
+}
+.goal-emoji { font-size: 26px; margin-bottom: 10px; }
+.goal-name { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.goal-target { font-size: 11.5px; color: var(--ink-40); margin-bottom: 14px; }
+.goal-progress-bar-bg {
+  height: 7px;
+  background: var(--ink-10);
+  border-radius: var(--r-full);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.goal-progress-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-mid) 100%);
+}
+.goal-footer { display: flex; justify-content: space-between; align-items: center; }
+.goal-saved { font-size: 13px; font-weight: 600; color: var(--ink); }
+.goal-pct {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+}
+
+/* ============================================
+   QUICK ACTIONS
+   ============================================ */
+.quick-actions { display: flex; gap: 10px; margin-bottom: 24px; }
+.qa-btn {
+  flex: 1;
+  background: var(--white);
+  border: 1px solid var(--ink-10);
+  border-radius: var(--r-md);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: all .2s var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+.qa-btn:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.qa-icon {
+  width: 38px; height: 38px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+}
+.qa-label { font-size: 11.5px; font-weight: 500; color: var(--ink-60); }
+
+/* ============================================
+   INSIGHT BANNER
+   ============================================ */
+.insight-banner {
+  background: linear-gradient(135deg, var(--secondary-light), #fff);
+  border: 1px solid var(--secondary-deep);
+  border-left: 4px solid var(--secondary-deep);
+  border-radius: var(--r-md);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.insight-icon { font-size: 22px; flex-shrink: 0; }
+.insight-text { font-size: 13px; color: var(--ink-60); line-height: 1.5; }
+.insight-text strong { color: var(--ink); font-weight: 600; }
+.insight-dismiss { margin-left: auto; color: var(--ink-40); font-size: 16px; cursor: pointer; flex-shrink: 0; }
+
+/* ============================================
+   SPENDING LEGEND
+   ============================================ */
+.legend-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.legend-swatch {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.legend-name { flex: 1; color: var(--ink); font-weight: 500; }
+.legend-amt { font-size: 13px; font-weight: 600; color: var(--ink); }
+.legend-pct { font-size: 11px; color: var(--ink-40); }
+
+/* ============================================
+   TYPOGRAPHY UTILITIES
+   ============================================ */
+.section-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.section-sub { font-size: 13px; color: var(--ink-40); margin-bottom: 20px; }
+.mt-4  { margin-top: 4px; }
+.mt-8  { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+.mb-8  { margin-bottom: 8px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+.text-ink-40 { color: var(--ink-40); }
+.fw-600 { font-weight: 600; }
+.fs-12 { font-size: 12px; }
+.fs-13 { font-size: 13px; }
+
+/* ============================================
+   MOBILE HEADER / NAV BAR
+   ============================================ */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--ink-10);
+  height: 60px;
+  padding: 0 20px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 200;
+}
+.mobile-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--primary);
+}
+.mobile-logo span { color: var(--secondary-deep); }
+.mobile-menu-btn {
+  width: 38px; height: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px;
+}
+.mobile-menu-btn span {
+  display: block;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: all .3s;
+}
+
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--white);
+  border-top: 1px solid var(--ink-10);
+  padding: 8px 0 12px;
+  z-index: 200;
+  box-shadow: 0 -8px 32px rgba(103,6,38,.08);
+}
+.mobile-nav-items {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: color .2s;
+}
+.mobile-nav-item.active { color: var(--primary); }
+.mobile-nav-item:not(.active) { color: var(--ink-40); }
+.mobile-nav-icon { font-size: 20px; }
+.mobile-nav-label { font-size: 9.5px; font-weight: 600; letter-spacing: .05em; }
+.mobile-nav-add {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 24px;
+  margin-top: -20px;
+  box-shadow: 0 4px 16px rgba(103,6,38,.35);
+  border: 3px solid var(--white);
+  transition: transform .2s;
+}
+.mobile-nav-add:active { transform: scale(.95); }
+
+/* Sidebar overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 99;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1100px) {
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-main { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.visible { display: block; }
+  .main { margin-left: 0; }
+  .topbar { display: none; }
+  .mobile-header { display: flex; }
+  .mobile-bottom-nav { display: block; }
+  .content { padding: 80px 16px 90px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .wallet-balance { font-size: 28px; }
+  .stat-value { font-size: 22px; }
+  .quick-actions { overflow-x: auto; padding-bottom: 4px; }
+  .qa-btn { flex: 0 0 auto; min-width: 80px; }
+}
+@media (max-width: 480px) {
+  .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+.card, .stat-card, .goal-card, .wallet-card, .qa-btn {
+  animation: fadeUp .4s var(--ease) both;
+}
+
+/* Stagger children */
+.grid-4 .stat-card:nth-child(1) { animation-delay: .05s; }
+.grid-4 .stat-card:nth-child(2) { animation-delay: .10s; }
+.grid-4 .stat-card:nth-child(3) { animation-delay: .15s; }
+.grid-4 .stat-card:nth-child(4) { animation-delay: .20s; }
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ink-20); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-40); }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark"><span>M</span></div>
+      <div>
+        <div class="logo-text">Modo</div>
+        <span class="logo-tag">Personal Finance</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <p class="sidebar-section-label">Menu</p>
+
+      <div class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v5H3zM3 10h9v11H3zM15 10h6v11h-6z"/></svg>
+        Budget
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Insights
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Transactions
+      </div>
+
+      <p class="sidebar-section-label" style="margin-top:8px">Planning</p>
+
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Goals
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M2 10h3M19 10h3"/></svg>
+        Cards
+      </div>
+
+      <p class="sidebar-section-label" style="margin-top:8px">Account</p>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+        Profile
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="user-card">
+        <div class="user-avatar">K</div>
+        <div>
+          <div class="user-name">Kamsiriochi</div>
+          <div class="user-plan">Pro Plan</div>
+        </div>
+        <span class="user-arrow">›</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============ MOBILE HEADER ============ -->
+  <header class="mobile-header">
+    <div class="mobile-logo">Mo<span>do</span></div>
+    <button class="mobile-menu-btn" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Dashboard</div>
+        <span class="topbar-subtitle">Welcome back, Kamsiriochi 👋</span>
+      </div>
+      <div class="topbar-right">
+        <select class="period-select">
+          <option>May 2025</option>
+          <option>Apr 2025</option>
+          <option>Mar 2025</option>
+        </select>
+        <button class="topbar-btn" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+        <button class="topbar-btn" aria-label="Notifications">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- INSIGHT BANNER -->
+      <div class="insight-banner">
+        <span class="insight-icon">💡</span>
+        <div class="insight-text">
+          <strong>Spending alert:</strong> You've used 82% of your Food & Dining budget. You have ₦8,400 left for the rest of the month.
+        </div>
+        <span class="insight-dismiss">✕</span>
+      </div>
+
+      <!-- STAT CARDS ROW -->
+      <div class="grid-4 mb-20">
+        <div class="stat-card balance">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Total Balance</div>
+          <div class="stat-value">₦482,300</div>
+          <span class="stat-change up">↑ 12.4%</span>
+        </div>
+        <div class="stat-card income">
+          <div class="stat-icon">📥</div>
+          <div class="stat-label">Monthly Income</div>
+          <div class="stat-value">₦150,000</div>
+          <span class="stat-change up">↑ 5.2%</span>
+        </div>
+        <div class="stat-card expense">
+          <div class="stat-icon">📤</div>
+          <div class="stat-label">Monthly Spend</div>
+          <div class="stat-value">₦89,740</div>
+          <span class="stat-change down">↑ 8.1%</span>
+        </div>
+        <div class="stat-card savings">
+          <div class="stat-icon">🏦</div>
+          <div class="stat-label">Saved This Month</div>
+          <div class="stat-value">₦60,260</div>
+          <span class="stat-change up">↑ 3.7%</span>
+        </div>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="quick-actions mb-20">
+        <button class="qa-btn">
+          <div class="qa-icon" style="background:var(--primary-light)">➕</div>
+          <span class="qa-label">Add Expense</span>
+        </button>
+        <button class="qa-btn">
+          <div class="qa-icon" style="background:rgba(77,175,124,.12)">💸</div>
+          <span class="qa-label">Transfer</span>
+        </button>
+        <button class="qa-btn">
+          <div class="qa-icon" style="background:rgba(74,144,217,.12)">📊</div>
+          <span class="qa-label">Report</span>
+        </button>
+        <button class="qa-btn">
+          <div class="qa-icon" style="background:rgba(240,180,41,.12)">🎯</div>
+          <span class="qa-label">Set Goal</span>
+        </button>
+        <button class="qa-btn">
+          <div class="qa-icon" style="background:var(--secondary-light)">🔔</div>
+          <span class="qa-label">Alerts</span>
+        </button>
+      </div>
+
+      <!-- MAIN GRID -->
+      <div class="grid-main">
+        <!-- LEFT COLUMN -->
+        <div>
+
+          <!-- SPENDING OVER TIME CHART -->
+          <div class="card mb-20">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Cash Flow</div>
+                <div style="font-size:12px;color:var(--ink-40);margin-top:2px">Income vs Expenses — May 2025</div>
+              </div>
+              <div style="display:flex;gap:16px;align-items:center">
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-60)"><span style="display:inline-block;width:16px;height:2.5px;background:var(--primary);border-radius:2px"></span> Income</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-60)"><span style="display:inline-block;width:16px;height:2px;background:var(--secondary-deep);border-radius:2px;border-top:2px dashed var(--secondary-deep)"></span> Expenses</div>
+                <span class="card-action">Full report →</span>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <svg class="chart-svg" viewBox="0 0 640 170" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#670626" stop-opacity="0.18"/>
+                    <stop offset="100%" stop-color="#670626" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <!-- Grid lines -->
+                <line x1="0" y1="30" x2="640" y2="30" stroke="#ede9ea" stroke-width="1"/>
+                <line x1="0" y1="70" x2="640" y2="70" stroke="#ede9ea" stroke-width="1"/>
+                <line x1="0" y1="110" x2="640" y2="110" stroke="#ede9ea" stroke-width="1"/>
+                <line x1="0" y1="150" x2="640" y2="150" stroke="#ede9ea" stroke-width="1"/>
+                <!-- Y labels -->
+                <text x="0" y="28" class="chart-label">150k</text>
+                <text x="0" y="68" class="chart-label">110k</text>
+                <text x="0" y="108" class="chart-label">70k</text>
+                <text x="0" y="148" class="chart-label">30k</text>
+                <!-- X labels -->
+                <text x="60"  y="168" class="chart-label" text-anchor="middle">1 May</text>
+                <text x="150" y="168" class="chart-label" text-anchor="middle">5</text>
+                <text x="240" y="168" class="chart-label" text-anchor="middle">10</text>
+                <text x="330" y="168" class="chart-label" text-anchor="middle">15</text>
+                <text x="420" y="168" class="chart-label" text-anchor="middle">20</text>
+                <text x="510" y="168" class="chart-label" text-anchor="middle">25</text>
+                <text x="600" y="168" class="chart-label" text-anchor="middle">30</text>
+
+                <!-- Income fill area -->
+                <path class="chart-fill-path" d="M60,80 C90,65 120,50 150,55 C180,60 210,75 240,60 C270,45 300,30 330,38 C360,46 390,65 420,55 C450,45 480,40 510,48 C540,56 570,70 600,62 L600,155 L60,155 Z"/>
+                <!-- Income line -->
+                <path class="chart-line-path" d="M60,80 C90,65 120,50 150,55 C180,60 210,75 240,60 C270,45 300,30 330,38 C360,46 390,65 420,55 C450,45 480,40 510,48 C540,56 570,70 600,62"/>
+                <!-- Expense line (dashed) -->
+                <path class="chart-line-path2" d="M60,105 C90,100 120,115 150,108 C180,100 210,95 240,105 C270,115 300,108 330,98 C360,88 390,100 420,95 C450,90 480,105 510,100 C540,95 570,90 600,98"/>
+                <!-- Dots on income -->
+                <circle class="chart-dot" cx="60" cy="80" r="4"/>
+                <circle class="chart-dot" cx="150" cy="55" r="4"/>
+                <circle class="chart-dot" cx="240" cy="60" r="4"/>
+                <circle class="chart-dot-active" cx="330" cy="38" r="5"/>
+                <circle class="chart-dot" cx="420" cy="55" r="4"/>
+                <circle class="chart-dot" cx="510" cy="48" r="4"/>
+                <circle class="chart-dot" cx="600" cy="62" r="4"/>
+                <!-- Active tooltip -->
+                <g class="chart-tooltip-group">
+                  <rect x="300" y="8" width="80" height="28" rx="6" fill="#0e0b0c"/>
+                  <text x="310" y="22" fill="rgba(186,215,151,.9)" font-family="'DM Sans',sans-serif" font-size="10" font-weight="600">15 May</text>
+                  <text x="310" y="32" fill="white" font-family="'DM Sans',sans-serif" font-size="10">₦95,000</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- BUDGET PROGRESS -->
+          <div class="card mb-20">
+            <div class="card-header">
+              <div class="card-title">Budget Progress</div>
+              <span class="card-action">Manage →</span>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-row">
+                <div class="progress-name">
+                  <span class="progress-dot" style="background:#e05a6b"></span>Food & Dining
+                </div>
+                <span class="progress-pct">82%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width:82%;background:var(--expense)"></div>
+              </div>
+              <div class="progress-amounts">
+                <span class="progress-spent">₦41,600 spent</span>
+                <span class="progress-budget">of ₦50,000</span>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-row">
+                <div class="progress-name">
+                  <span class="progress-dot" style="background:#4a90d9"></span>Transport
+                </div>
+                <span class="progress-pct">64%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width:64%;background:#4a90d9"></div>
+              </div>
+              <div class="progress-amounts">
+                <span class="progress-spent">₦19,200 spent</span>
+                <span class="progress-budget">of ₦30,000</span>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-row">
+                <div class="progress-name">
+                  <span class="progress-dot" style="background:var(--secondary-deep)"></span>Entertainment
+                </div>
+                <span class="progress-pct">38%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width:38%;background:var(--secondary-deep)"></div>
+              </div>
+              <div class="progress-amounts">
+                <span class="progress-spent">₦7,600 spent</span>
+                <span class="progress-budget">of ₦20,000</span>
+              </div>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-row">
+                <div class="progress-name">
+                  <span class="progress-dot" style="background:var(--primary)"></span>Savings Goal
+                </div>
+                <span class="progress-pct">54%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width:54%;background:var(--primary)"></div>
+              </div>
+              <div class="progress-amounts">
+                <span class="progress-spent">₦27,000 saved</span>
+                <span class="progress-budget">of ₦50,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- GOALS ROW -->
+          <div class="mb-20">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <h2 class="section-title" style="font-size:17px;margin:0">Active Goals</h2>
+              <span class="card-action">All goals →</span>
+            </div>
+            <div class="grid-3">
+              <div class="goal-card">
+                <div class="goal-emoji">✈️</div>
+                <div class="goal-name">Travel Fund</div>
+                <div class="goal-target">Target: ₦500,000</div>
+                <div class="goal-progress-bar-bg">
+                  <div class="goal-progress-fill" style="width:62%"></div>
+                </div>
+                <div class="goal-footer">
+                  <span class="goal-saved">₦310,000</span>
+                  <span class="goal-pct">62%</span>
+                </div>
+              </div>
+              <div class="goal-card">
+                <div class="goal-emoji">💻</div>
+                <div class="goal-name">MacBook Pro</div>
+                <div class="goal-target">Target: ₦850,000</div>
+                <div class="goal-progress-bar-bg">
+                  <div class="goal-progress-fill" style="width:29%"></div>
+                </div>
+                <div class="goal-footer">
+                  <span class="goal-saved">₦245,000</span>
+                  <span class="goal-pct">29%</span>
+                </div>
+              </div>
+              <div class="goal-card">
+                <div class="goal-emoji">🎓</div>
+                <div class="goal-name">MSc Fees</div>
+                <div class="goal-target">Target: ₦1,200,000</div>
+                <div class="goal-progress-bar-bg">
+                  <div class="goal-progress-fill" style="width:44%"></div>
+                </div>
+                <div class="goal-footer">
+                  <span class="goal-saved">₦528,000</span>
+                  <span class="goal-pct">44%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+
+          <!-- WALLET CARD -->
+          <div class="wallet-card mb-20">
+            <div class="wallet-top">
+              <div class="wallet-chip"></div>
+              <span class="wallet-network">MODO WALLET</span>
+            </div>
+            <div>
+              <div class="wallet-balance-label">Available Balance</div>
+              <div class="wallet-balance">₦482,300.00</div>
+            </div>
+            <div class="wallet-bottom">
+              <div class="wallet-number">•••• •••• 4821</div>
+              <div class="wallet-in-out">
+                <div class="wallet-stat">
+                  <div class="wallet-stat-label">Income</div>
+                  <div class="wallet-stat-value in">+₦150k</div>
+                </div>
+                <div class="wallet-stat">
+                  <div class="wallet-stat-label">Spend</div>
+                  <div class="wallet-stat-value out">-₦89.7k</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SPENDING BREAKDOWN DONUT -->
+          <div class="card mb-20">
+            <div class="card-header">
+              <div class="card-title">Spending Breakdown</div>
+              <span class="card-action">Details →</span>
+            </div>
+            <div style="display:flex;justify-content:center;margin-bottom:8px">
+              <div class="donut-wrap">
+                <svg width="140" height="140" viewBox="0 0 140 140">
+                  <!-- Donut segments (cx=70, cy=70, r=50, circumference≈314) -->
+                  <circle cx="70" cy="70" r="50" fill="none" stroke="#ede9ea" stroke-width="20"/>
+                  <!-- Food 32% -->
+                  <circle cx="70" cy="70" r="50" fill="none" stroke="#e05a6b" stroke-width="20"
+                    stroke-dasharray="100.5 213.5" stroke-dashoffset="0" transform="rotate(-90 70 70)"/>
+                  <!-- Transport 22% -->
+                  <circle cx="70" cy="70" r="50" fill="none" stroke="#4a90d9" stroke-width="20"
+                    stroke-dasharray="69.1 245" stroke-dashoffset="-100.5" transform="rotate(-90 70 70)"/>
+                  <!-- Entertainment 12% -->
+                  <circle cx="70" cy="70" r="50" fill="none" stroke="#BAD797" stroke-width="20"
+                    stroke-dasharray="37.7 276.3" stroke-dashoffset="-169.6" transform="rotate(-90 70 70)"/>
+                  <!-- Bills 20% -->
+                  <circle cx="70" cy="70" r="50" fill="none" stroke="#670626" stroke-width="20"
+                    stroke-dasharray="62.8 251.2" stroke-dashoffset="-207.3" transform="rotate(-90 70 70)"/>
+                  <!-- Other 14% -->
+                  <circle cx="70" cy="70" r="50" fill="none" stroke="#f0b429" stroke-width="20"
+                    stroke-dasharray="44 270" stroke-dashoffset="-270.1" transform="rotate(-90 70 70)"/>
+                </svg>
+                <div class="donut-center">
+                  <div class="donut-center-val">₦89.7k</div>
+                  <div class="donut-center-label">Total Spend</div>
+                </div>
+              </div>
+            </div>
+            <div class="legend-list">
+              <div class="legend-item">
+                <span class="legend-swatch" style="background:#e05a6b"></span>
+                <span class="legend-name">Food & Dining</span>
+                <span class="legend-amt">₦28,700</span>
+                <span class="legend-pct">32%</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-swatch" style="background:#4a90d9"></span>
+                <span class="legend-name">Transport</span>
+                <span class="legend-amt">₦19,740</span>
+                <span class="legend-pct">22%</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-swatch" style="background:#670626"></span>
+                <span class="legend-name">Bills & Utilities</span>
+                <span class="legend-amt">₦17,950</span>
+                <span class="legend-pct">20%</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-swatch" style="background:#f0b429"></span>
+                <span class="legend-name">Other</span>
+                <span class="legend-amt">₦12,560</span>
+                <span class="legend-pct">14%</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-swatch" style="background:#BAD797"></span>
+                <span class="legend-name">Entertainment</span>
+                <span class="legend-amt">₦10,790</span>
+                <span class="legend-pct">12%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT TRANSACTIONS -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Transactions</div>
+              <span class="card-action">All →</span>
+            </div>
+            <div>
+              <div class="txn-item">
+                <div class="txn-icon">🛒</div>
+                <div class="txn-info">
+                  <div class="txn-name">Shoprite Lekki</div>
+                  <div class="txn-date">Today, 2:41 PM</div>
+                </div>
+                <span class="txn-category">Groceries</span>
+                <div class="txn-amount debit">-₦14,500</div>
+              </div>
+              <div class="txn-item">
+                <div class="txn-icon">💼</div>
+                <div class="txn-info">
+                  <div class="txn-name">Ortho Technologies</div>
+                  <div class="txn-date">Today, 9:00 AM</div>
+                </div>
+                <span class="txn-category">Income</span>
+                <div class="txn-amount credit">+₦150,000</div>
+              </div>
+              <div class="txn-item">
+                <div class="txn-icon">🍜</div>
+                <div class="txn-info">
+                  <div class="txn-name">Chicken Republic</div>
+                  <div class="txn-date">Yesterday, 7:22 PM</div>
+                </div>
+                <span class="txn-category">Food</span>
+                <div class="txn-amount debit">-₦3,800</div>
+              </div>
+              <div class="txn-item">
+                <div class="txn-icon">🚗</div>
+                <div class="txn-info">
+                  <div class="txn-name">Bolt Ride</div>
+                  <div class="txn-date">Yesterday, 5:10 PM</div>
+                </div>
+                <span class="txn-category">Transport</span>
+                <div class="txn-amount debit">-₦1,200</div>
+              </div>
+              <div class="txn-item">
+                <div class="txn-icon">🎵</div>
+                <div class="txn-info">
+                  <div class="txn-name">Spotify Premium</div>
+                  <div class="txn-date">13 May, 12:00 AM</div>
+                </div>
+                <span class="txn-category">Subscription</span>
+                <div class="txn-amount debit">-₦2,900</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main><!-- /main -->
+
+  <!-- ============ MOBILE BOTTOM NAV ============ -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-nav-items">
+      <div class="mobile-nav-item active">
+        <span class="mobile-nav-icon">⊞</span>
+        <span class="mobile-nav-label">Home</span>
+      </div>
+      <div class="mobile-nav-item">
+        <span class="mobile-nav-icon">📊</span>
+        <span class="mobile-nav-label">Budget</span>
+      </div>
+      <div class="mobile-nav-item">
+        <div class="mobile-nav-add">＋</div>
+      </div>
+      <div class="mobile-nav-item">
+        <span class="mobile-nav-icon">🧾</span>
+        <span class="mobile-nav-label">Txns</span>
+      </div>
+      <div class="mobile-nav-item">
+        <span class="mobile-nav-icon">👤</span>
+        <span class="mobile-nav-label">Profile</span>
+      </div>
+    </div>
+  </nav>
+
+</div><!-- /app -->
+
+<script>
+// Sidebar toggle for mobile
+const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  overlay.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+menuBtn?.addEventListener('click', openSidebar);
+overlay?.addEventListener('click', closeSidebar);
+
+// Nav active state
+document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const parent = this.closest('.sidebar-nav, .mobile-nav-items');
+    if (!parent) return;
+    parent.querySelectorAll('.nav-item, .mobile-nav-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+    if (window.innerWidth < 768) closeSidebar();
+  });
+});
+
+// Dismiss insight banner
+document.querySelector('.insight-dismiss')?.addEventListener('click', function() {
+  this.closest('.insight-banner').style.display = 'none';
+});
+
+// Animate progress bars on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('.progress-bar-fill, .goal-progress-fill').forEach(bar => {
+    const w = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(() => { bar.style.width = w; }, 200);
+  });
+});
+</script>
+</body>
+</html>

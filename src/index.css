@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* ============================================
+   MODO DESIGN SYSTEM — Tailwind v4 CSS-first
+   ============================================ */
+@theme {
+  /* Brand */
+  --color-primary: #670626;
+  --color-primary-deep: #4a0419;
+  --color-primary-mid: #8c0933;
+  --color-primary-light: #f9eaee;
+
+  --color-secondary: #BAD797;
+  --color-secondary-deep: #8fb872;
+  --color-secondary-light: #edf7e4;
+
+  /* Neutrals */
+  --color-ink: #0e0b0c;
+  --color-ink-80: #2c2729;
+  --color-ink-60: #5a5254;
+  --color-ink-40: #8e8688;
+  --color-ink-20: #c8c3c4;
+  --color-ink-10: #ede9ea;
+  --color-ink-05: #f8f5f6;
+
+  /* Sidebar */
+  --color-sidebar: #1a0a0e;
+  --color-sidebar-hover: rgba(186, 215, 151, 0.08);
+  --color-sidebar-active: rgba(186, 215, 151, 0.14);
+
+  /* Semantic */
+  --color-income: #4daf7c;
+  --color-expense: #e05a6b;
+  --color-warn: #f0b429;
+  --color-info: #4a90d9;
+
+  /* Surface Colors */
+  --color-bg-body: #f8f5f6;
+  --color-bg-card: #ffffff;
+
+  /* Typography */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Shadows */
+  --shadow-card: 0 2px 8px rgba(103, 6, 38, 0.07);
+  --shadow-elevated: 0 6px 24px rgba(103, 6, 38, 0.11);
+  --shadow-float: 0 16px 48px rgba(103, 6, 38, 0.15);
+
+  /* Easing */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+.dark {
+  /* Neutrals inverted */
+  --color-ink: #f8f5f6;
+  --color-ink-80: #ede9ea;
+  --color-ink-60: #c8c3c4;
+  --color-ink-40: #8e8688;
+  --color-ink-20: #5a5254;
+  --color-ink-10: #2c2729;
+  --color-ink-05: #0e0b0c;
+
+  /* Surface Colors */
+  --color-bg-body: #0e0b0c;
+  --color-bg-card: #1a0a0e;
+
+  /* Adjust brand for dark mode readability */
+  --color-primary-light: rgba(103, 6, 38, 0.3);
+  --color-secondary-light: rgba(186, 215, 151, 0.15);
+
+  /* Shadows for dark mode */
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================
+   BASE / RESET
+   ============================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg-body);
+  color: var(--color-ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-20);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-40);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.4s var(--ease-smooth) both;
+}
